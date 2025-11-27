@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>misc.lol 🤣</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #24292f;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #f6f8fa;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            width: 250px;
+            background-color: #f6f8fa;
+            padding: 20px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-bottom: 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #0366d6;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 800px;
+        }
+
+        pre {
+            background-color: #f6f8fa;
+            border-radius: 6px;
+            padding: 16px;
+            overflow: auto;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+            font-size: 85%;
+        }
+
+        .about-me {
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .project-links {
+            margin-top: 5px;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 2px;
+            background-color: #e1ecf4;
+            color: #39739d;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: nowrap;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .project-link:hover {
+            background-color: #d0e3f1;
+            color: #2c5777;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="about-me">
+                <h1>misc.lol 🤣</h1>
+                <p>Father of two and IT engineer</p>
+                <h4>Open Source Projects</h4>
+                <div class="project-links">
+                    <a href="https://www.truenas.com" target="_blank" class="project-link">TrueNAS</a>
+                    <a href="https://grapheneos.org" target="_blank" class="project-link">GrapheneOS</a>
+                    <a href="https://fedoraproject.org/atomic-desktops/silverblue/" target="_blank"
+                        class="project-link">Fedora Silverblue</a>
+                    <a href="https://www.debian.org" target="_blank" class="project-link">Debian</a>
+                    <a href="https://brew.sh" target="_blank" class="project-link">Homebrew</a>
+                    <a href="https://openwrt.org" target="_blank" class="project-link">OpenWrt</a>
+                    <a href="https://opnsense.org" target="_blank" class="project-link">OPNsense</a>
+                    <a href="https://jellyfin.org" target="_blank" class="project-link">Jellyfin</a>
+                    <a href="https://bitcoin.org/en/" target="_blank" class="project-link">Bitcoin</a>
+                    <a href="https://transmissionbt.com" target="_blank" class="project-link">Bittorrent</a>
+                </div>
+                <h4> Apple</h4>
+                <div class="project-links">
+                    <a href="https://www.apple.com/airpods-max/" target="_blank" class="project-link">AirPods Max</a>
+                    <a href="https://www.apple.com/homepod/" target="_blank" class="project-link">HomePod</a>
+                    <a href="https://www.apple.com/apple-tv-4k/" target="_blank" class="project-link">Apple TV 4K</a>
+                    <a href="https://www.apple.com/macbook-air/" target="_blank" class="project-link">MacBook Air</a>
+                    <a href="https://www.lg.com" target="_blank" class="project-link">LG UltraFine™ 5K</a>
+                    <a href="https://www.logitech.com" target="_blank" class="project-link">Logitech MX Master</a>
+
+
+                </div>
+                <h4>more</h4>
+                <div class="project-links">
+                    <a href="https://www.raspberrypi.com" target="_blank" class="project-link">Raspberry Pi</a>
+                    <a href="https://proton.me" target="_blank" class="project-link">Proton</a>
+                </div>
+                <h3>Software</h3>
+                <ul>
+                    <li><a href="#basic">Brewfile</a></li>
+                </ul>
+            </div>
+        </nav>
+        <main>
+            <h1>Software</h1>
+
+            <h2 id="basic">Brewfile</h2>
+            <pre><code>
+tap "buo/cask-upgrade"
+tap "homebrew/cask", "https://github.com/Homebrew/homebrew-cask.git"
+tap "homebrew/core"
+# Library and utilities for processing GIFs
+brew "giflib"
+# Library for manipulating PNG images
+brew "libpng"
+# General-purpose data compression with high compression ratio
+brew "xz"
+# TIFF library and utilities
+brew "libtiff"
+# Color management engine supporting ICC profiles
+brew "little-cms2"
+# High dynamic-range image file format
+brew "openexr"
+# Image format providing lossless and lossy compression for web images
+brew "webp"
+# Codec library for encoding and decoding AV1 video streams
+brew "aom"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@3"
+# Library for command-line editing
+brew "readline"
+# Command-line interface for SQLite
+brew "sqlite"
+# Deduplicating archiver with compression and authenticated encryption
+brew "borgbackup"
+# Software library to render fonts
+brew "freetype"
+# C string library for manipulating Unicode strings
+brew "libunistring"
+# GNU internationalization (i18n) and localization (l10n) library
+brew "gettext"
+# XML-based font configuration API for X Windows
+brew "fontconfig"
+# Perl compatible regular expressions library with a new API
+brew "pcre2"
+# Core application library for C
+brew "glib"
+# Real-time data compression library
+brew "lzo"
+# Low-level library for pixel manipulation
+brew "pixman"
+# Vector graphics library with cross-device output support
+brew "cairo"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# GNU multiple precision arithmetic library
+brew "gmp"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Tool for downloading RTMP streaming media
+brew "rtmpdump"
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
+# Terminal document viewer for .docx files
+brew "doxx"
+# Perl lib for reading and writing EXIF metadata
+brew "exiftool"
+# Ogg Bitstream Library
+brew "libogg"
+# Free lossless audio codec
+brew "flac"
+# Minimalistic plugin API for video effects
+brew "frei0r"
+# Implementation of the Unicode BiDi algorithm
+brew "fribidi"
+# Asynchronous event library
+brew "libevent"
+# International domain name library (IDNA2008, Punycode and TR46)
+brew "libidn2"
+# ASN.1 structure parser library
+brew "libtasn1"
+# Low-level cryptographic library
+brew "nettle"
+# Library to load and enumerate PKCS#11 modules
+brew "p11-kit"
+# Validating, recursive, caching DNS resolver
+brew "unbound", restart_service: :changed
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# Smart font renderer for non-Roman scripts
+brew "graphite2"
+# OpenType text shaping engine
+brew "harfbuzz"
+# High quality MPEG Audio Layer III (MP3) encoder
+brew "lame"
+# Library for JPEG-2000 image manipulation
+brew "openjpeg"
+# Image processing and image analysis library
+brew "leptonica"
+# Subtitle renderer for the ASS/SSA subtitle format
+brew "libass"
+# Blu-Ray disc playback library for media players like VLC
+brew "libbluray"
+# Library for sample rate conversion of audio data
+brew "libsamplerate"
+# Vorbis general audio compression codec
+brew "libvorbis"
+# Audio codec
+brew "opus"
+# C library for files containing sampled sound
+brew "libsndfile"
+# High quality, one-dimensional sample-rate conversion library
+brew "libsoxr"
+# Transcode video stabilization plugin
+brew "libvidstab"
+# VP8/VP9 video codec
+brew "libvpx"
+# Audio codecs extracted from Android open source project
+brew "opencore-amr"
+# Audio time stretcher tool and library
+brew "rubberband"
+# Low-level access to audio, keyboard, mouse, joystick, and graphics
+brew "sdl2"
+# Compression/decompression library aiming for high speed
+brew "snappy"
+# Audio codec designed for speech
+brew "speex"
+# OCR (Optical Character Recognition) engine
+brew "tesseract"
+# Open video compression format
+brew "theora"
+# H.264/AVC encoder
+brew "x264"
+# H.265/HEVC encoder
+brew "x265"
+# High-performance, high-quality MPEG-4 video library
+brew "xvid"
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
+# Collection of GNU find, xargs, and locate
+brew "findutils"
+# C library for multiple-precision floating-point computations
+brew "mpfr"
+# GNU awk utility
+brew "gawk"
+# Toolkit for image loading and pixel buffer manipulation
+brew "gdk-pixbuf"
+# GitHub command-line tool
+brew "gh"
+# JBIG2 decoder and library (for monochrome documents)
+brew "jbig2dec"
+# International domain name library
+brew "libidn"
+# Interpreter for PostScript and PDF
+brew "ghostscript"
+# Distributed revision control system
+brew "git"
+# C library of Git core methods that is re-entrant and linkable
+brew "libgit2"
+# Regular expressions library
+brew "oniguruma"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Git extension for versioning large files
+brew "git-lfs"
+# Command-line option parsing utility
+brew "gnu-getopt"
+# GNU implementation of the famous stream editor
+brew "gnu-sed"
+# GNU version of the tar archiving utility
+brew "gnu-tar"
+# Common error values for all GnuPG components
+brew "libgpg-error"
+# Assuan IPC Library
+brew "libassuan"
+# Cryptographic library based on the code from GnuPG
+brew "libgcrypt"
+# X.509 and CMS library
+brew "libksba"
+# Library for USB device access
+brew "libusb"
+# New GNU portable threads library
+brew "npth"
+# Passphrase entry dialog utilizing the Assuan protocol
+brew "pinentry"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
+# Package compiler and linker metadata toolkit
+brew "pkgconf"
+# Generate introspection data for GObject libraries
+brew "gobject-introspection"
+# GNU grep, egrep and fgrep
+brew "grep"
+# Text-based UI library
+brew "ncurses"
+# Improved top (interactive process viewer)
+brew "htop"
+# Library for manipulating JPEG-2000 images
+brew "jasper"
+# Open h.265 video codec implementation
+brew "libde265"
+# Database of common MIME types
+brew "shared-mime-info"
+# ISO/IEC 23008-12:2017 HEIF file format decoder and encoder
+brew "libheif"
+# C/C++ seam carving library
+brew "liblqr"
+# LLVM's OpenMP runtime library
+brew "libomp", link: true
+# Generic library support script
+brew "libtool"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
+# Command-line pager for JSON data
+brew "jless"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Library for parsing mms:// and mmsh:// network streams
+brew "libmms"
+# Shared library for libmediainfo
+brew "libzen"
+# Library to render SVG files using Cairo
+brew "librsvg"
+# Clone of ls with colorful output, file type icons, and more
+brew "lsd"
+# Mac App Store command-line interface
+brew "mas"
+# Platform-neutral API for system-level and libc-like functions
+brew "nspr"
+# Libraries for security-enabled client and server applications
+brew "nss"
+# Python 3 bindings for the Cairo graphics library
+brew "py3cairo"
+# GNOME Python bindings (based on GObject Introspection)
+brew "pygobject3"
+# Metadata anonymization toolkit
+brew "mat2"
+# Show markdown documents on text terminals
+brew "mdcat"
+# Unified display of technical and tag data for audio/video
+brew "media-info"
+# Command-line client for Mega.co.nz
+brew "megatools"
+# 7-Zip (high compression file archiver) implementation
+brew "p7zip"
+# Library like getopt(3) with a number of enhancements
+brew "popt"
+# Password generator
+brew "pwgen"
+# Simple, modern, secure file encryption
+brew "rage"
+# Fast, efficient and secure backup program
+brew "restic"
+# Provides fake name and address data
+brew "rig"
+# Utility that provides fast incremental file transfer
+brew "rsync"
+# Rust toolchain installer
+brew "rustup"
+# 7-Zip is a file archiver with a high compression ratio
+brew "sevenzip"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Clean C library for processing UTF-8 Unicode data
+brew "utf8proc"
+# Terminal multiplexer
+brew "tmux"
+# Upgrade all the things
+brew "topgrade"
+# Extraction utility for .zip compressed archives
+brew "unzip"
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# Internet file retriever
+brew "wget"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Monero desktop wallet
+cask "feather"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Note taking and to-do application with synchronisation capabilities
+cask "joplin"
+# Password manager app
+cask "keepassxc"
+# Wallet desktop application to maintain multiple cryptocurrencies
+cask "ledger-wallet"
+# Clipboard manager
+cask "maccy"
+# Web browser focused on privacy and on minimizing tracking and fingerprinting
+cask "mullvad-browser"
+# Free and open-source RSS reader
+cask "netnewswire"
+# G-code generator for 3D printers
+cask "orcaslicer"
+# Utility to uninstall apps and remove leftover files from old/uninstalled apps
+cask "pearcleaner"
+# Client for Proton Mail and Proton Calendar
+cask "proton-mail"
+# Imaging utility to install operating systems to a microSD card
+cask "raspberry-pi-imager"
+# Instant messaging application focusing on security
+cask "signal"
+# Media player based on MPlayer and mplayer2
+cask "stolendata-mpv"
+# Customizable email client
+cask "thunderbird"
+# Open-source BitTorrent client
+cask "transmission"
+# Companion app for the Trezor hardware wallet
+cask "trezor-suite"
+mas "GrandPerspective", id: 1111570163
+mas "Infuse", id: 1136220934
+mas "uBlock Origin Lite", id: 6745342698
+mas "WireGuard", id: 1451685025
+            </code></pre>
+        </main>
+    </div>
+</body>
+
+</html>
