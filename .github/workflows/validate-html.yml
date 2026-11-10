@@ -1,0 +1,182 @@
+# HTML Standards Check
+#
+# Prüft alle HTML-Dateien streng gegen Web-Standards und prüft die enthaltenen
+# Links auf Erreichbarkeit (404-Fehler). Report via Annotations + Job Summary.
+# Bricht NIE ab (non-blocking, alles nur informativ).
+
+name: HTML Standards Check
+
+on:
+  push:
+    paths:
+      - "**.html"
+      - ".github/workflows/html-check.yml"
+  pull_request:
+    paths:
+      - "**.html"
+      - ".github/workflows/html-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Mehrere Pushes in kurzer Folge: nur der aktuellste Lauf bleibt aktiv,
+# ältere (obsoletierte) Läufe werden gecancelt — spart Runner-Zeit.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate HTML (strict, non-blocking)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      # ------------------------------------------------------------------
+      # 1) W3C Nu HTML Checker (vnu.jar)
+      #    Strengste verfügbare HTML-Prüfung (WHATWG-Referenz).
+      #    Läuft genau EINMAL (JSON) — der lesbare Text-Report wird
+      #    aus dem JSON abgeleitet statt den Validator doppelt laufen zu lassen.
+      # ------------------------------------------------------------------
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Download W3C Nu HTML Checker
+        run: |
+          curl -sSL -o "$RUNNER_TEMP/vnu.jar" \
+            https://github.com/validator/validator/releases/latest/download/vnu.jar
+
+      - name: Run W3C Nu HTML Checker (single pass, JSON)
+        run: |
+          mkdir -p reports
+          java -jar "$RUNNER_TEMP/vnu.jar" \
+            --exit-zero-always --format json --skip-non-html . \
+            > reports/vnu.json 2>/dev/null || true
+
+          # Lesbarer Klartext-Report aus dem JSON ableiten
+          jq -r '.messages[]
+                 | "\(.url | sub("^file://" ; "") | sub(getpath(["env","PWD"]) ; "")):\(.firstLine // .lastLine // "-"): \(.type): \(.message)"' \
+            reports/vnu.json 2>/dev/null > reports/vnu.txt || true
+
+      - name: Create GitHub Annotations from W3C report
+        if: always()
+        run: |
+          if [ ! -s reports/vnu.json ]; then
+            echo "reports/vnu.json is empty – no results to annotate."
+            exit 0
+          fi
+
+          # Fehler und Warnungen als Annotations in die PR-/Commit-Ansicht.
+          # (Annotations allein brechen den Job nicht ab.)
+          jq -r '.messages[] | [.type, .url, (.lastLine // .firstLine // 1), .message] | @tsv' \
+            reports/vnu.json 2>/dev/null | \
+          while IFS=$'\t' read -r type url line msg; do
+            file="${url#file://}"
+            file="${file#"$PWD"/}"
+            msg="$(printf '%s' "$msg" | tr '\n' ' ')"
+            case "$type" in
+              error)        echo "::error file=${file},line=${line}::W3C: ${msg}" ;;
+              warning|info) echo "::notice file=${file},line=${line}::W3C: ${msg}" ;;
+            esac
+          done
+
+      # ------------------------------------------------------------------
+      # 2) html-validate — ergänzende strikte Lint-Prüfung
+      #    Node ist auf den Runner-Images vorinstalliert — kein
+      #    setup-node nötig, npx reicht. Spart ~10 s pro Lauf.
+      # ------------------------------------------------------------------
+      - name: Run html-validate (strict lint)
+        if: always()
+        run: |
+          mapfile -t HTML_FILES < <(find . -name '*.html' -not -path './node_modules/*')
+          if [ "${#HTML_FILES[@]}" -eq 0 ]; then
+            echo "No HTML files found."
+            exit 0
+          fi
+          npx --yes html-validate "${HTML_FILES[@]}" > reports/html-validate.txt 2>&1 || true
+
+      # ------------------------------------------------------------------
+      # 3) Link-Check — erkennt tote/verschobene URLs (z.B. 404),
+      #    bevor sie Besucher sehen. Non-blocking.
+      # ------------------------------------------------------------------
+      - name: Check external links (404 detection)
+        if: always()
+        run: |
+          mapfile -t HTML_FILES < <(find . -name '*.html' -not -path './node_modules/*')
+          if [ "${#HTML_FILES[@]}" -eq 0 ]; then
+            echo "No HTML files found."
+            exit 0
+          fi
+          npx --yes linkinator "${HTML_FILES[@]}" > reports/link-check.txt 2>&1 || true
+          grep -E "(\(40[0-9]\)|ERROR)" reports/link-check.txt \
+            && echo "::notice::Broken links found — see Job Summary (link-check.txt) for details." \
+            || true
+
+      # ------------------------------------------------------------------
+      # 4) Summary + Persistenz der Reports
+      # ------------------------------------------------------------------
+      - name: Write Job Summary
+        if: always()
+        run: |
+          w3c_count() {
+            jq "[.messages[] | select(.type == \"$1\")] | length" reports/vnu.json 2>/dev/null
+          }
+          W3C_ERR=$(w3c_count error);  [ -n "$W3C_ERR" ]  || W3C_ERR=0
+          W3C_WARN=$(w3c_count warning); [ -n "$W3C_WARN" ] || W3C_WARN=0
+          # 'info' ist bei vnu eine eigene Kategorie mitzählen
+          INFO_COUNT=$(w3c_count info); [ -n "$INFO_COUNT" ] || INFO_COUNT=0
+          W3C_HINTS=$((W3C_WARN + INFO_COUNT))
+
+          BROKEN=$(grep -cE "(\(40[0-9]\)|ERROR)" reports/link-check.txt 2>/dev/null || echo 0)
+
+          {
+            echo "## HTML Validation Report"
+            echo ""
+            echo "| Check | Ergebnis |"
+            echo "|-------|----------|"
+            echo "| W3C Nu HTML Checker (Fehler) | ${W3C_ERR} |"
+            echo "| W3C Nu HTML Checker (Hinweise) | ${W3C_HINTS} |"
+            echo "| Broken links (404 etc.) | ${BROKEN} |"
+            echo ""
+            echo "_Non-blocking: dieser Job schlägt trotz Funden nie fehl._"
+            echo ""
+            echo "<details>"
+            echo "<summary>vnu.txt (W3C, Klartext)</summary>"
+            echo ""
+            echo '```'
+            cat reports/vnu.txt 2>/dev/null
+            echo '```'
+            echo "</details>"
+            echo ""
+            echo "<details>"
+            echo "<summary>html-validate.txt (Lint)</summary>"
+            echo ""
+            echo '```'
+            cat reports/html-validate.txt 2>/dev/null
+            echo '```'
+            echo "</details>"
+            echo ""
+            echo "<details>"
+            echo "<summary>link-check.txt (Externe Links)</summary>"
+            echo ""
+            echo '```'
+            cat reports/link-check.txt 2>/dev/null
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: html-validation-reports
+          path: reports/
+          if-no-files-found: ignore
+          retention-days: 7
